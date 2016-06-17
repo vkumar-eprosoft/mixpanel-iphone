@@ -1,13 +1,11 @@
+def shared_pods
+    pod 'OCMock', '~> 3.0'
+end
+
 target :HelloMixpanelTests do
-    link_with 'HelloMixpanelTests'
-    pod 'CocoaHTTPServer', '~> 2.2.1'
+  shared_pods
 end
 
-target :ABTestingTests do
-    link_with 'ABTestingTests'
-    pod 'CocoaHTTPServer', '~> 2.2.1'
-end
-
-target :EventBindingTests do
-  pod 'OCMock', '~> 3.0'
+target :HelloMixpanel_tvOSTests do
+  shared_pods
 end

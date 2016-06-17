@@ -1,25 +1,18 @@
-#if ! __has_feature(objc_arc)
-#error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag on this file.
-#endif
-
 #import <objc/runtime.h>
 #import <QuartzCore/QuartzCore.h>
 #import <CommonCrypto/CommonDigest.h>
 #import "UIView+MPHelpers.h"
-#import "MPFoundation.h"
 
 // NB If you add any more fingerprint methods, increment this.
 #define MP_FINGERPRINT_VERSION 1
 
 @implementation UIView (MPHelpers)
 
-- (int)mp_fingerprintVersion
-{
+- (int)mp_fingerprintVersion {
     return MP_FINGERPRINT_VERSION;
 }
 
-- (UIImage *)mp_snapshotImage
-{
+- (UIImage *)mp_snapshotImage {
     CGSize size = self.layer.bounds.size;
     UIGraphicsBeginImageContext(size);
     
@@ -31,17 +24,14 @@
     return image;
 }
 
-- (UIImage *)mp_snapshotForBlur
-{
+- (UIImage *)mp_snapshotForBlur {
     UIImage *image = [self mp_snapshotImage];
     // hack, helps with colors when blurring
     NSData *imageData = UIImageJPEGRepresentation(image, 1); // convert to jpeg
     return [UIImage imageWithData:imageData];
 }
 
-// mp_targetActions
-- (NSArray *)mp_targetActions
-{
+- (NSArray *)mp_targetActions {
     NSMutableArray *targetActions = [NSMutableArray array];
     if ([self isKindOfClass:[UIControl class]]) {
         for (id target in [(UIControl *)(self) allTargets]) {
@@ -117,7 +107,7 @@
     UIImage *originalImage = nil;
     if ([self isKindOfClass:[UIButton class]]) {
         originalImage = [((UIButton *)self) imageForState:UIControlStateNormal];
-    } else if ([NSStringFromClass([self.superview class]) isEqual:@"UITabBarButton"] && [self respondsToSelector:NSSelectorFromString(@"image")]) {
+    } else if ([NSStringFromClass([self.superview class]) isEqual:@"UITabBarButton"] && [self respondsToSelector:@selector(image)]) {
         originalImage = (UIImage *)[self performSelector:@selector(image)];
     }
     
@@ -146,7 +136,7 @@
 - (NSString *)mp_text
 {
     NSString *text = nil;
-    SEL titleSelector = NSSelectorFromString(@"title");
+    SEL titleSelector = @selector(title);
     if ([self isKindOfClass:[UILabel class]]) {
         text = ((UILabel *)self).text;
     } else if ([self isKindOfClass:[UIButton class]]) {
